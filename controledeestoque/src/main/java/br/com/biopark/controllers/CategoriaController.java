@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.biopark.dtos.CategoriaQntdDTO;
 import br.com.biopark.models.Categoria;
 import br.com.biopark.services.CategoriaService;
 
@@ -54,5 +55,11 @@ public class CategoriaController {
 	public ResponseEntity<?> delete(@PathVariable(value = "id") Long id){
 		service.delete(id);
 		return ResponseEntity.ok("Categoria deletada com sucesso!");
+	}
+	
+	@GetMapping(value = "/qntdTotal/{id}",
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public CategoriaQntdDTO findQntdByCategoriaId(@PathVariable(value = "id") Long id) {
+		return service.findQntdByCategoriaId(id);
 	}
 }
