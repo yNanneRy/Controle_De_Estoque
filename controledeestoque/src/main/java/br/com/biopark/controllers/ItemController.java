@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.biopark.models.Item;
+import br.com.biopark.data.vo.v1.ItemVO;
 import br.com.biopark.services.ItemService;
 
 @RestController
@@ -26,26 +26,26 @@ public class ItemController {
 	ItemService service;
 	
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<Item> findAll() {
+	public List<ItemVO> findAll() {
 		return service.findAll();
 	}
 	
 	@GetMapping(value = "/{id}",
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public Item findById(@PathVariable(value = "id") Long id) {
+	public ItemVO findById(@PathVariable(value = "id") Long id) {
 		return service.findById(id);
 	}
 	
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> save(@RequestBody Item item){
+	public ResponseEntity<?> save(@RequestBody ItemVO item){
 		service.save(item);
 		return ResponseEntity.ok("Item " + item.getNome() + " salvo com sucesso!");
 	}
 	
 	@PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> update(@RequestBody Item item){
+	public ResponseEntity<?> update(@RequestBody ItemVO item){
 		service.update(item);
 		return ResponseEntity.ok("Item " + item.getNome() + " salvo com sucesso!");
 	}
@@ -73,7 +73,7 @@ public class ItemController {
 	
 	@GetMapping(value = "/categoria/{id}",
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<Item> findAllByCategoriaId(@PathVariable(value = "id") Long id){
+	public List<ItemVO> findAllByCategoriaId(@PathVariable(value = "id") Long id){
 		return service.findAllByCategoriaId(id);
 	}
 }

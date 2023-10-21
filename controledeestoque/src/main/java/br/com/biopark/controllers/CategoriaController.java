@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.biopark.data.vo.v1.CategoriaVO;
 import br.com.biopark.dtos.CategoriaQntdDTO;
-import br.com.biopark.models.Categoria;
 import br.com.biopark.services.CategoriaService;
 
 @RestController
@@ -26,26 +26,26 @@ public class CategoriaController {
 	CategoriaService service;
 	
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<Categoria> findAll(){
+	public List<CategoriaVO> findAll(){
 		return service.findAll();
 	}
 	
 	@GetMapping(value = "/{id}",
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public Categoria findById(@PathVariable(value = "id") Long id) {
+	public CategoriaVO findById(@PathVariable(value = "id") Long id) {
 		return service.findById(id);
 	}
 	
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> save(@RequestBody Categoria categoria) {
+	public ResponseEntity<?> save(@RequestBody CategoriaVO categoria) {
 		service.save(categoria);
 		return ResponseEntity.ok("Categoria " + categoria.getNome() + " salva com sucesso!");
 	}
 	
 	@PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> update(@RequestBody Categoria categoria){
+	public ResponseEntity<?> update(@RequestBody CategoriaVO categoria){
 		service.update(categoria);
 		return ResponseEntity.ok("Categoria " + categoria.getNome() + " salva com sucesso!");
 	}

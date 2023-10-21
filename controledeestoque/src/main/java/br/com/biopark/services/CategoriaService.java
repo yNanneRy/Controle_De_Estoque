@@ -6,9 +6,11 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.biopark.data.vo.v1.CategoriaVO;
 import br.com.biopark.dtos.CategoriaQntdDTO;
 import br.com.biopark.dtos.ItemDTO;
 import br.com.biopark.exceptions.MinhaException;
+import br.com.biopark.mapper.Mapper;
 import br.com.biopark.models.Categoria;
 import br.com.biopark.models.Item;
 import br.com.biopark.repositories.CategoriaRepository;
@@ -22,25 +24,25 @@ public class CategoriaService {
 	@Autowired
 	ItemRepository itemRepository;
 	
-	public List<Categoria> findAll(){
-		return repository.findAll();
+	public List<CategoriaVO> findAll(){
+		return Mapper.parseListObjects(repository.findAll(), CategoriaVO.class);
 	}
 	
-	public Categoria findById(Long id) {
+	public CategoriaVO findById(Long id) {
 		if (id == null) throw new MinhaException("Id deve ser preenchido!");
-		return repository.findById(id).orElseThrow(() -> new MinhaException("Categoria não encontrada!"));
+		return Mapper.parseObject(repository.findById(id).orElseThrow(() -> new MinhaException("Categoria não encontrada!")), CategoriaVO.class);
 	}
 	
-	public void save(Categoria categoria) {
+	public void save(CategoriaVO categoria) {
 		if (categoria.getId() != null) throw new MinhaException("Id não deve ser preenchido!");
 		if (categoria.getNome() == null) throw new MinhaException("Nome deve ser preenchido!");
-		repository.save(categoria);
+		repository.save(Mapper.parseObject(categoria, Categoria.class));
 	}
 	
-	public void update(Categoria categoria) {
+	public void update(CategoriaVO categoria) {
 		if (categoria.getId() == null) throw new MinhaException("Id deve ser preenchido!");
 		if (categoria.getNome() == null) throw new MinhaException("Nome deve ser preenchido!");
-		repository.save(categoria);
+		repository.save(Mapper.parseObject(categoria, Categoria.class));
 	}
 	
 	public void delete(Long id) {

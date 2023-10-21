@@ -5,7 +5,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.biopark.data.vo.v1.ItemVO;
 import br.com.biopark.exceptions.MinhaException;
+import br.com.biopark.mapper.Mapper;
 import br.com.biopark.models.Item;
 import br.com.biopark.repositories.CategoriaRepository;
 import br.com.biopark.repositories.ItemRepository;
@@ -18,29 +20,29 @@ public class ItemService {
 	@Autowired
 	CategoriaRepository categoriaRepository;
 	
-	public List<Item> findAll(){
-		return repository.findAll();
+	public List<ItemVO> findAll(){
+		return Mapper.parseListObjects(repository.findAll(), ItemVO.class);
 	}
 	
-	public Item findById(Long id) {
+	public ItemVO findById(Long id) {
 		if (id == null) throw new MinhaException("Id deve ser preenchido!");
-		return repository.findById(id).orElseThrow(() -> new MinhaException("Item não encontrado!"));
+		return Mapper.parseObject(repository.findById(id).orElseThrow(() -> new MinhaException("Item não encontrado!")), ItemVO.class);
 	}
 	
-	public void save(Item item) {
+	public void save(ItemVO item) {
 		if (item.getId() != null) throw new MinhaException("Id não deve ser preenchido!");
 		if (item.getNome() == null) throw new MinhaException("Nome deve ser preenchido!");
 		if (item.getQntd() <=0 ) throw new MinhaException("Quantidade deve ser preenchida e não pode ser menor ou igual a 0!");
 		if (item.getCategoria() == null) throw new MinhaException("Categoria deve ser relacionada!");
-		repository.save(item);
+		repository.save(Mapper.parseObject(item, Item.class));
 	}
 	
-	public void update(Item item) {
+	public void update(ItemVO item) {
 		if (item.getId() == null) throw new MinhaException("Id deve ser preenchido!");
 		if (item.getNome() == null) throw new MinhaException("Nome deve ser preenchido!");
 		if (item.getQntd() <=0 ) throw new MinhaException("Quantidade deve ser preenchida e não pode ser menor ou igual a 0!");
 		if (item.getCategoria() == null) throw new MinhaException("Categoria deve ser relacionada!");
-		repository.save(item);
+		repository.save(Mapper.parseObject(item, Item.class));
 	}
 	
 	public void delete(Long id) {
@@ -68,9 +70,9 @@ public class ItemService {
 		return item.getQntd();
 	}
 	
-	public List<Item> findAllByCategoriaId(Long id){
+	public List<ItemVO> findAllByCategoriaId(Long id){
 		if (id == null) throw new MinhaException("Id deve ser preenchido!");
 		if (categoriaRepository.existsById(id) == false) throw new MinhaException("Categoria não existe!");
-		return repository.findAllByCategoriaId(id);
+		return Mapper.parseListObjects(repository.findAllByCategoriaId(id), ItemVO.class);
 	}
 }
